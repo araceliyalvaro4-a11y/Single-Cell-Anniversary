@@ -1,0 +1,84 @@
+
+<div class="min-h-screen bg-gradient-to-br from-blue-300 to-green-200 flex flex-col items-center justify-center p-4 font-sans text-gray-800 relative overflow-hidden">
+
+  <!-- Background elements - inspired by Bikini Bottom style -->
+  <div class="absolute inset-0 z-0 opacity-20">
+    <div class="absolute top-10 left-1/4 w-32 h-32 bg-yellow-400 rounded-full blur-xl"></div>
+    <div class="absolute bottom-20 right-1/3 w-48 h-48 bg-pink-400 rounded-full blur-2xl"></div>
+    <div class="absolute top-1/3 right-1/4 w-24 h-24 bg-teal-400 rounded-full blur-lg"></div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="relative z-10 w-full max-w-4xl bg-white bg-opacity-90 rounded-2xl shadow-lg p-6 md:p-8 flex flex-col items-center border-4 border-yellow-600">
+    <h1 class="text-4xl md:text-5xl font-bold text-yellow-700 mb-6 text-center drop-shadow-md">Single Cell Anniversary!</h1>
+
+    <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full">
+      <!-- Plankton's Side -->
+      <div class="flex flex-col items-center w-full md:w-1/2 p-4 bg-blue-100 rounded-xl border-2 border-blue-400 shadow-inner">
+        <h2 class="text-2xl font-semibold text-blue-700 mb-4">Plankton</h2>
+        <app-plankton-avatar
+          [state]="planktonState()"
+          [showHat]="showPlanktonHat()"
+          [showSpongebob]="showSpongebob()"
+          [showSquidward]="showSquidward()"
+          [showSandy]="showSandy()"
+          [showCitizens]="showCitizens()"
+        ></app-plankton-avatar>
+        @if (currentSceneId() === 7 && planktonSong()) {
+          <div class="mt-4 p-3 bg-white rounded-lg shadow-md text-sm italic text-center">
+            {{ planktonSong() }}
+          </div>
+        }
+      </div>
+
+      <!-- Karen's Side -->
+      <div class="flex flex-col items-center w-full md:w-1/2 p-4 bg-pink-100 rounded-xl border-2 border-pink-400 shadow-inner">
+        <h2 class="text-2xl font-semibold text-pink-700 mb-4">Karen</h2>
+        <app-karen-monitor
+          [expression]="karenExpression()"
+          [dialogue]="karenDialogue()"
+          [loading]="loadingGemini()"
+          [showWashingMachine]="showWashingMachine()"
+          [showMirror]="showMirror()"
+          [showCrabbyPattyFormula]="showCrabbyPattyFormula()"
+          [krabbyPattyLoading]="krabbyPattyLoading()"
+          [showCoffeeMaker]="showCoffeeMaker()"
+        ></app-karen-monitor>
+      </div>
+    </div>
+
+    <!-- Interactive elements based on scene -->
+    <div class="mt-8 flex flex-col items-center w-full max-w-md gap-4">
+      @if (currentSceneId() === 2) {
+        <button (click)="onWashPlankton()" class="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full shadow-lg transition duration-300">
+          Wash Plankton!
+        </button>
+      } @else if (currentSceneId() === 7) {
+        <button (click)="onSingToKaren()" [disabled]="loadingGemini()" class="px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-full shadow-lg transition duration-300">
+          @if (loadingGemini()) {
+            Generating Song...
+          } @else {
+            Sing to Karen!
+          }
+        </button>
+      } @else if (currentSceneId() === 10) {
+        <button (click)="onSpongebobIntervenes()" class="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-blue-900 font-bold rounded-full shadow-lg transition duration-300">
+          Spongebob's Plan! (Stop Formula Download)
+        </button>
+      } @else if (currentSceneId() === 11) {
+        <button (click)="onUnplugKaren()" class="px-6 py-3 bg-red-500 hover:bg-red-600 text-white font-bold rounded-full shadow-lg transition duration-300">
+          Unplug Karen!
+        </button>
+      } @else if (currentSceneId() === 13) {
+        <button (click)="onRestart()" class="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-full shadow-lg transition duration-300">
+          Restart
+        </button>
+      } @else {
+        <button (click)="nextScene()" class="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white font-bold rounded-full shadow-lg transition duration-300">
+          {{ scenes[currentSceneId()].nextButtonText || 'Continue' }}
+        </button>
+      }
+    </div>
+  </div>
+</div>
+    
